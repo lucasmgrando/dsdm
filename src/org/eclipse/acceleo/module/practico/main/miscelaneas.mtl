@@ -1,0 +1,41 @@
+ 
+[comment encoding = UTF-8 /]
+[module miscelaneas('http://www.example.org/diagramaClasesCompleto')]
+
+
+[template public generarClaseMain(raiz : DiagramaClases)]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/'+(raiz.artefacto_contenido.nombre)+'.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/];
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class [raiz.artefacto_contenido.nombre/] {
+
+	public static void main(String['['/][']'/] args) {
+		SpringApplication.run([raiz.artefacto_contenido.nombre/].class, args);
+	}
+
+}
+[/file]
+[/template]
+
+[template public generarEntityMapper(raiz : DiagramaClases)]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/service/mapper/EntityMapper.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.mapper;
+
+import java.util.List;
+
+public interface EntityMapper <D, E> {
+
+    E toEntity(D dto);
+
+    D toDto(E entity);
+
+    List <E> toEntity(List<D> dtoList);
+
+    List <D> toDto(List<E> entityList);
+}
+[/file]
+[/template]

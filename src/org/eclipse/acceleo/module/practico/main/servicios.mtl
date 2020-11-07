@@ -1,0 +1,72 @@
+[comment encoding = UTF-8 /]
+[module servicios('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarServicios(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[if (clase.tieneABM)]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/service/'+clase.nombre+'Service.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service;
+
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].domain.[clase.nombre/];
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].repository.[clase.nombre/]Repository;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto.[clase.nombre/]DTO;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.mapper.[clase.nombre/]Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@Service
+@Transactional
+public class [clase.nombre/]Service {
+
+    private final Logger log = LoggerFactory.getLogger([clase.nombre/]Service.class);
+
+    private final [clase.nombre/]Repository [clase.nombre.toLowerCase()/]Repository;
+
+    private final [clase.nombre/]Mapper [clase.nombre.toLowerCase()/]Mapper;
+
+    public [clase.nombre/]Service([clase.nombre/]Repository [clase.nombre.toLowerCase()/]Repository, [clase.nombre/]Mapper [clase.nombre.toLowerCase()/]Mapper) {
+        this.[clase.nombre.toLowerCase()/]Repository = [clase.nombre.toLowerCase()/]Repository;
+        this.[clase.nombre.toLowerCase()/]Mapper = [clase.nombre.toLowerCase()/]Mapper;
+    }
+
+    public [clase.nombre/]DTO save([clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO) {
+        log.debug("Request to save [clase.nombre/] : {}", [clase.nombre.toLowerCase()/]DTO);
+        [clase.nombre/] [clase.nombre.toLowerCase()/] = [clase.nombre.toLowerCase()/]Mapper.toEntity([clase.nombre.toLowerCase()/]DTO);
+        [clase.nombre.toLowerCase()/] = [clase.nombre.toLowerCase()/]Repository.save([clase.nombre.toLowerCase()/]);
+        return [clase.nombre.toLowerCase()/]Mapper.toDto([clase.nombre.toLowerCase()/]);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<[clase.nombre/]DTO> findAll(Pageable pageable) {
+        log.debug("Request to get all [clase.nombre/]s");
+        return [clase.nombre.toLowerCase()/]Repository.findAll(pageable)
+            .map([clase.nombre.toLowerCase()/]Mapper::toDto);
+    }
+
+
+    @Transactional(readOnly = true)
+    public Optional<[clase.nombre/]DTO> findOne(Long id) {
+        log.debug("Request to get [clase.nombre/] : {}", id);
+        return [clase.nombre.toLowerCase()/]Repository.findById(id)
+            .map([clase.nombre.toLowerCase()/]Mapper::toDto);
+    }
+
+    public void delete(Long id) {
+        log.debug("Request to delete [clase.nombre/] : {}", id);
+        [clase.nombre.toLowerCase()/]Repository.deleteById(id);
+    }
+}
+[/file]
+[/if]
+[/for]
+[/for]
+[/template]

@@ -1,0 +1,104 @@
+[comment encoding = UTF-8 /]
+[module controladores('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarControladores(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[if (clase.tieneABM)]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/controller/'+clase.nombre+'Controller.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].controller;
+
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.[clase.nombre/]Service;
+import BadRequestAlertException;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].dto.[clase.nombre/]DTO;
+
+import HeaderUtil;
+import PaginationUtil;
+import ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api")
+public class [clase.nombre/]Controller {
+
+    private final Logger log = LoggerFactory.getLogger([clase.nombre/]Controller.class);
+
+    private static final String ENTITY_NAME = "[clase.nombre/]";
+
+    @Value("${applicationName}")
+    private String applicationName;
+
+    private final [clase.nombre/]Service [clase.nombre.toLowerCase()/]Service;
+
+    public [clase.nombre/]Controller([clase.nombre/]Service [clase.nombre.toLowerCase()/]Service) {
+        this.[clase.nombre.toLowerCase()/]Service = [clase.nombre.toLowerCase()/]Service;
+    }
+
+    @PostMapping("/[clase.nombre.toLowerCase()/]")
+    public ResponseEntity<[clase.nombre/]DTO> create[clase.nombre/](@Valid @RequestBody [clase.nombre.toLowerCase()/]DTO [clase.nombre.toLowerCase()/]DTO) throws URISyntaxException {
+        log.debug("REST request to save [clase.nombre/] : {}", [clase.nombre.toLowerCase()/]DTO);
+        if ([clase.nombre.toLowerCase()/]DTO.getId() != null) {
+            throw new BadRequestAlertException("A new [clase.nombre.toLowerCase()/] cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        [clase.nombre/]DTO result = [clase.nombre.toLowerCase()/]Service.save([clase.nombre.toLowerCase()/]DTO);
+        return ResponseEntity.created(new URI("/api/[clase.nombre.toLowerCase()/]/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/[clase.nombre.toLowerCase()/]")
+    public ResponseEntity<[clase.nombre/]DTO> update[clase.nombre/](@Valid @RequestBody [clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO) throws URISyntaxException {
+        log.debug("REST request to update [clase.nombre/] : {}", [clase.nombre.toLowerCase()/]DTO);
+        if ([clase.nombre.toLowerCase()/]DTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        [clase.nombre/]DTO result =[clase.nombre.toLowerCase()/]Service.save([clase.nombre.toLowerCase()/]DTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, [clase.nombre.toLowerCase()/]DTO.getId().toString()))
+            .body(result);
+    }
+
+    @GetMapping("/[clase.nombre.toLowerCase()/]")
+    public ResponseEntity<List<[clase.nombre/]DTO>> getAll[clase.nombre/]s(Pageable pageable) {
+        log.debug("REST request to get a page of [clase.nombre/]s");
+        Page<[clase.nombre/]DTO> page =[clase.nombre.toLowerCase()/]Service.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/[clase.nombre.toLowerCase()/]/{id}")
+    public ResponseEntity<[clase.nombre/]DTO> get[clase.nombre/](@PathVariable Long id) {
+        log.debug("REST request to get [clase.nombre/] : {}", id);
+        Optional<[clase.nombre/]DTO> [clase.nombre.toLowerCase()/]DTO =[clase.nombre.toLowerCase()/]Service.findOne(id);
+        return ResponseUtil.wrapOrNotFound([clase.nombre.toLowerCase()/]DTO);
+    }
+
+    @DeleteMapping("/[clase.nombre.toLowerCase()/]/{id}")
+    public ResponseEntity<Void> delete[clase.nombre/](@PathVariable Long id) {
+        log.debug("REST request to delete [clase.nombre/] : {}", id);
+        [clase.nombre.toLowerCase()/]Service.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+}
+
+[/file]
+[/if]
+[/for]
+[/for]
+[/template]

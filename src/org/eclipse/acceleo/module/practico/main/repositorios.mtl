@@ -1,0 +1,25 @@
+[comment encoding = UTF-8 /]
+[module repositorios('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarRepositorios(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[if (clase.tieneABM)]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/repository/'+clase.nombre+'Repository.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].repository;
+
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].[clase.nombre/];
+
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
+
+@SuppressWarnings("unused")
+@Repository
+	public interface [clase.nombre/]Repository extends JpaRepository<[clase.nombre/], Long> {
+}
+[/file]
+[/if]
+[/for]
+[/for]
+[/template]
