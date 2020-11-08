@@ -1,0 +1,92 @@
+[comment encoding = UTF-8 /]
+[module dtos('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarDTOs(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/service/dto/'+clase.nombre+'DTO.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto;
+
+import java.io.Serializable;
+
+public class [clase.nombre/] implements Serializable {
+
+    private Long id;
+
+[for (a : Atributo | clase.atributos_contenidos)]
+    private [a.tipo/] [a.nombre/];
+
+[/for]
+
+[for (r : Relacion | clase.relaciones_contenidas)]
+[if r.multiplicidad = Multiplicidad::oneToOne]
+    private Long [r.destino.nombre.toLowerCase()/]Id;
+
+[/if]
+[/for]
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+[for (a : Atributo | clase.atributos_contenidos)]
+    public [a.tipo/] get[a.nombre.toUpperFirst()/]() {
+        return [a.nombre/];
+    }
+
+    public void set[a.nombre.toUpperFirst()/]([a.tipo/] [a.nombre/]) {
+        this.[a.nombre/] = [a.nombre/];
+    }
+
+[/for]
+[for (r : Relacion | clase.relaciones_contenidas)]
+[if r.multiplicidad = Multiplicidad::oneToOne]
+    public Long get[r.destino.nombre/]Id() {
+        return [r.destino.nombre.toLowerCase()/]Id;
+    }
+
+    public void set[r.destino.nombre/]Id(Long [r.destino.nombre.toLowerCase()/]Id) {
+        this.[r.destino.nombre.toLowerCase()/]Id = [r.destino.nombre.toLowerCase()/]Id;
+    }
+[/if]
+
+[/for]
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof [clase.nombre/])) {
+            return false;
+        }
+        return id != null && id.equals((([clase.nombre/]) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "[clase.nombre/]{" +
+            "id=" + getId() +
+[for (a : Atributo | clase.atributos_contenidos)]
+            ", [a.nombre/]='" + get[a.nombre.toUpperFirst()/]() + "'" +
+[/for]
+[for (r : Relacion | clase.relaciones_contenidas)]
+            ", [r.destino.nombre.toLowerCase()/]Id='" + get[r.destino.nombre/]Id() + "'" +
+[/for]
+            "}";
+    }
+}
+
+[/file]
+[/for]
+[/for]
+[/template]

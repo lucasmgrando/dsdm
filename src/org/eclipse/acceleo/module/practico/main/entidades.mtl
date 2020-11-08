@@ -1,0 +1,104 @@
+[comment encoding = UTF-8 /]
+[module entidades('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarEntidades(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/entity/'+clase.nombre+'Entity.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].entity;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+
+import java.io.Serializable;
+
+@Entity
+@Table(name = "[clase.nombre.toLowerCase()/]")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class [clase.nombre/] implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+[for (a : Atributo | clase.atributos_contenidos)]
+    @Column(name = "[a.nombre.toLowerCase()/]")
+    private [a.tipo/] [a.nombre/];
+
+[/for]
+
+[for (r : Relacion | clase.relaciones_contenidas)]
+[if r.multiplicidad = Multiplicidad::oneToOne]
+	@OneToOne
+    @JoinColumn(unique = true)
+    private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
+
+[/if]
+[/for]
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+[for (a : Atributo | clase.atributos_contenidos)]
+    public [a.tipo/] get[a.nombre.toUpperFirst()/]() {
+        return [a.nombre/];
+    }
+
+    public void set[a.nombre.toUpperFirst()/]([a.tipo/] [a.nombre/]) {
+        this.[a.nombre/] = [a.nombre/];
+    }
+
+[/for]
+[for (r : Relacion | clase.relaciones_contenidas)]
+[if r.multiplicidad = Multiplicidad::oneToOne]
+    public [r.destino.nombre/] get[r.destino.nombre/]() {
+        return [r.destino.nombre.toLowerCase()/];
+    }
+
+    public void set[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
+        this.[r.destino.nombre.toLowerCase()/] = [r.destino.nombre.toLowerCase()/];
+    }
+[/if]
+
+[/for]
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof [clase.nombre/])) {
+            return false;
+        }
+        return id != null && id.equals((([clase.nombre/]) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31;
+    }
+
+    @Override
+    public String toString() {
+        return "[clase.nombre/]{" +
+            "id=" + getId() +
+[for (a : Atributo | clase.atributos_contenidos)]
+            ", [a.nombre/]='" + get[a.nombre.toUpperFirst()/]() + "'" +
+[/for]
+            "}";
+    }
+}
+
+[/file]
+[/for]
+[/for]
+[/template]

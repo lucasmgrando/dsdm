@@ -1,0 +1,47 @@
+[comment encoding = UTF-8 /]
+[module mappers('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarMappers(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/service/mapper/'+clase.nombre+'Mapper.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.mapper;
+
+
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].entity.*;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto.[clase.nombre/]DTO;
+
+import org.mapstruct.*;
+
+
+@Mapper(componentModel = "spring", uses = {
+[for (r : Relacion | clase.relaciones_contenidas)]
+[r.destino.nombre/]Mapper.class,
+[/for]
+})
+public interface [clase.nombre/]Mapper extends EntityMapper<[clase.nombre/]DTO, [clase.nombre/]> {
+	
+[for (r : Relacion | clase.relaciones_contenidas)]
+    @Mapping(source = "[r.destino.nombre.toLowerCase()/].id", target = "[r.destino.nombre.toLowerCase()/]Id")
+[/for]
+    [clase.nombre/]DTO toDto([clase.nombre/] [clase.nombre.toLowerCase()/]);
+
+[for (r : Relacion | clase.relaciones_contenidas)]
+    @Mapping(source = "[r.destino.nombre.toLowerCase()/]Id", target = "[r.destino.nombre.toLowerCase()/]")
+[/for]
+    [clase.nombre/] toEntity([clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO);
+
+    default [clase.nombre/] fromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        [clase.nombre/] [clase.nombre.toLowerCase()/] = new [clase.nombre/]();
+        [clase.nombre.toLowerCase()/].setId(id);
+        return [clase.nombre.toLowerCase()/];
+    }
+}
+[/file]
+[/for]
+[/for]
+[/template]

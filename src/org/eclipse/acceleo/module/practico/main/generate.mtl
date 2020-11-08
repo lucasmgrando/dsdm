@@ -4,6 +4,9 @@
 [import org::eclipse::acceleo::module::practico::main::controladores /]
 [import org::eclipse::acceleo::module::practico::main::servicios /]
 [import org::eclipse::acceleo::module::practico::main::repositorios /]
+[import org::eclipse::acceleo::module::practico::main::entidades /]
+[import org::eclipse::acceleo::module::practico::main::mappers /]
+[import org::eclipse::acceleo::module::practico::main::dtos /]
 
 [template public generate(raiz : DiagramaClases)]
 [comment @main/]
@@ -11,4 +14,7 @@
 [generarControladores(raiz)/]
 [generarRepositorios(raiz)/]
 [generarEntityMapper(raiz)/]
+[generarEntidades(raiz)/]
+[generarDTOs(raiz)/]
+[generarMappers(raiz)/]
 [/template]
