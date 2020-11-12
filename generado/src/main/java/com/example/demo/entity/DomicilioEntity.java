@@ -25,6 +25,10 @@ public class Domicilio implements Serializable {
     private int numero;
 
 
+    @OneToMany(mappedBy = "domicilio")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Localidad> localidads = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -50,6 +54,25 @@ public class Domicilio implements Serializable {
         this.numero = numero;
     }
 
+	public Set<Localidad> getLocalidads() {
+        return localidads;
+    }
+
+    public Domicilio addLocalidad(Localidad localidad) {
+        this.localidads.add(localidad);
+        job.setDomicilio(this);
+        return this;
+    }
+
+    public Domicilio removeLocalidad(Localidad localidad) {
+        this.localidads.remove(localidad);
+        job.setDomicilio(null);
+        return this;
+    }
+
+    public void setLocalidads(Set<Localidad> localidads) {
+        this.localidads = localidads;
+    }
 
     @Override
     public boolean equals(Object o) {

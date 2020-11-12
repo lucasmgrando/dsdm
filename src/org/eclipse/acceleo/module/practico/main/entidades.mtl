@@ -33,14 +33,59 @@ public class [clase.nombre/] implements Serializable {
 [/for]
 
 [for (r : Relacion | clase.relaciones_contenidas)]
-[if r.multiplicidad = Multiplicidad::oneToOne]
+[if r.multiplicidad = Multiplicidad::oneToOne and clase.nombre = r.origen.nombre]
 	@OneToOne
     @JoinColumn(unique = true)
     private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
 
 [/if]
-[/for]
+[if r.multiplicidad = Multiplicidad::oneToOne and clase.nombre = r.origen.nombre]
+    @OneToOne
+    @JoinColumn(unique = true)
+    private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
 
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToOne and clase.nombre = r.origen.nombre]
+    @ManyToOne
+    @JsonIgnoreProperties(value = "[r.origen.nombre.toLowerCase()/]s", allowSetters = true)
+    private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToOne and clase.nombre = r.destino.nombre]
+    @OneToMany(mappedBy = "employee")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.origen.nombre]
+    @OneToMany(mappedBy = "[r.origen.nombre.toLowerCase()/]")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.destino.nombre]
+    @ManyToOne
+    @JsonIgnoreProperties(value = "[r.origen.nombre.toLowerCase()/]s", allowSetters = true)
+    private [r.origen.nombre/] [r.origen.nombre.toLowerCase()/];
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.origen.nombre]
+	@ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
+               joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "[r.destino.nombre.toLowerCase()/]_id", referencedColumnName = "id"))
+    private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/] = new HashSet<>();
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.destino.nombre]
+    @ManyToMany(mappedBy = "[r.destino.nombre.toLowerCase()/]")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/] = new HashSet<>();
+
+[/if]
+[/for]
     public Long getId() {
         return id;
     }
@@ -60,7 +105,7 @@ public class [clase.nombre/] implements Serializable {
 
 [/for]
 [for (r : Relacion | clase.relaciones_contenidas)]
-[if r.multiplicidad = Multiplicidad::oneToOne]
+[if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
     public [r.destino.nombre/] get[r.destino.nombre/]() {
         return [r.destino.nombre.toLowerCase()/];
     }
@@ -68,8 +113,40 @@ public class [clase.nombre/] implements Serializable {
     public void set[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
         this.[r.destino.nombre.toLowerCase()/] = [r.destino.nombre.toLowerCase()/];
     }
-[/if]
 
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.origen.nombre or r.multiplicidad = Multiplicidad::manyToMany]
+	public Set<[r.destino.nombre/]> get[r.destino.nombre/]s() {
+        return [r.destino.nombre.toLowerCase()/]s;
+    }
+
+    public [r.origen.nombre/] add[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
+        this.[r.destino.nombre.toLowerCase()/]s.add([r.destino.nombre.toLowerCase()/]);
+        job.set[r.origen.nombre/](this);
+        return this;
+    }
+
+    public [r.origen.nombre/] remove[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
+        this.[r.destino.nombre.toLowerCase()/]s.remove([r.destino.nombre.toLowerCase()/]);
+        job.set[r.origen.nombre/](null);
+        return this;
+    }
+
+    public void set[r.destino.nombre/]s(Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/]s) {
+        this.[r.destino.nombre.toLowerCase()/]s = [r.destino.nombre.toLowerCase()/]s;
+    }
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.destino.nombre]
+	public [r.destino.nombre/] get[r.destino.nombre/]() {
+        return [r.destino.nombre.toLowerCase()/];
+    }
+
+    public void set[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
+        this.[r.destino.nombre.toLowerCase()/] = [r.destino.nombre.toLowerCase()/];
+    }
+
+[/if]
 [/for]
     @Override
     public boolean equals(Object o) {

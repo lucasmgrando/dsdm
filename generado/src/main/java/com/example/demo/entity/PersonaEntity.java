@@ -32,6 +32,14 @@ public class Persona implements Serializable {
     @JoinColumn(unique = true)
     private Domicilio domicilio;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Domicilio domicilio;
+
+    @OneToMany(mappedBy = "persona")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Libro> libros = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -73,6 +81,25 @@ public class Persona implements Serializable {
         this.domicilio = domicilio;
     }
 
+	public Set<Libro> getLibros() {
+        return libros;
+    }
+
+    public Persona addLibro(Libro libro) {
+        this.libros.add(libro);
+        job.setPersona(this);
+        return this;
+    }
+
+    public Persona removeLibro(Libro libro) {
+        this.libros.remove(libro);
+        job.setPersona(null);
+        return this;
+    }
+
+    public void setLibros(Set<Libro> libros) {
+        this.libros = libros;
+    }
 
     @Override
     public boolean equals(Object o) {

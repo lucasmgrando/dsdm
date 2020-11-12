@@ -34,6 +34,13 @@ public class Libro implements Serializable {
     private int fecha;
 
 
+	@ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(name = "libro_autor",
+               joinColumns = @JoinColumn(name = "libro_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"))
+    private Set<Autor> autor = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -83,6 +90,25 @@ public class Libro implements Serializable {
         this.fecha = fecha;
     }
 
+	public Set<Autor> getAutors() {
+        return autors;
+    }
+
+    public Libro addAutor(Autor autor) {
+        this.autors.add(autor);
+        job.setLibro(this);
+        return this;
+    }
+
+    public Libro removeAutor(Autor autor) {
+        this.autors.remove(autor);
+        job.setLibro(null);
+        return this;
+    }
+
+    public void setAutors(Set<Autor> autors) {
+        this.autors = autors;
+    }
 
     @Override
     public boolean equals(Object o) {
