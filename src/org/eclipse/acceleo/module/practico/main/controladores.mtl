@@ -10,12 +10,12 @@
 package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].controller;
 
 import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.[clase.nombre/]Service;
-import BadRequestAlertException;
-import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].dto.[clase.nombre/]DTO;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].utils.BadRequestAlertException;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto.[clase.nombre/]DTO;
 
-import HeaderUtil;
-import PaginationUtil;
-import ResponseUtil;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +51,7 @@ public class [clase.nombre/]Controller {
     }
 
     @PostMapping("/[clase.nombre.toLowerCase()/]")
-    public ResponseEntity<[clase.nombre/]DTO> create[clase.nombre/](@Valid @RequestBody [clase.nombre.toLowerCase()/]DTO [clase.nombre.toLowerCase()/]DTO) throws URISyntaxException {
+    public ResponseEntity<[clase.nombre/]DTO> create[clase.nombre/](@Valid @RequestBody [clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO) throws URISyntaxException {
         log.debug("REST request to save [clase.nombre/] : {}", [clase.nombre.toLowerCase()/]DTO);
         if ([clase.nombre.toLowerCase()/]DTO.getId() != null) {
             throw new BadRequestAlertException("A new [clase.nombre.toLowerCase()/] cannot already have an ID", ENTITY_NAME, "idexists");

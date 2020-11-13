@@ -9,7 +9,7 @@
 package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.mapper;
 
 
-import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].entity.*;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].domain.*;
 import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto.[clase.nombre/]DTO;
 
 import org.mapstruct.*;

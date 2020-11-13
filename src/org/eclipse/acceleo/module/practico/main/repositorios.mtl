@@ -9,7 +9,7 @@
 [file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/repository/'+clase.nombre+'Repository.java', false, 'UTF-8')]
 package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].repository;
 
-import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].entity.[clase.nombre/];
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].domain.[clase.nombre/];
 
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;

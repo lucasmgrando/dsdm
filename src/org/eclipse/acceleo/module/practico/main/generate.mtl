@@ -7,6 +7,8 @@
 [import org::eclipse::acceleo::module::practico::main::entidades /]
 [import org::eclipse::acceleo::module::practico::main::mappers /]
 [import org::eclipse::acceleo::module::practico::main::dtos /]
+[import org::eclipse::acceleo::module::practico::main::build /]
+[import org::eclipse::acceleo::module::practico::main::configuracion /]
 
 [template public generate(raiz : DiagramaClases)]
 [comment @main/]
@@ -17,4 +19,8 @@
 [generarEntidades(raiz)/]
 [generarDTOs(raiz)/]
 [generarMappers(raiz)/]
+[generarServicios(raiz)/]
+[generarPOM(raiz)/]
+[generarConfiguracion(raiz)/]
+[generarBadRequestAlertException(raiz)/]
 [/template]

@@ -10,7 +10,7 @@ package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactot
 
 import java.io.Serializable;
 
-public class [clase.nombre/] implements Serializable {
+public class [clase.nombre/]DTO implements Serializable {
 
     private Long id;
 
