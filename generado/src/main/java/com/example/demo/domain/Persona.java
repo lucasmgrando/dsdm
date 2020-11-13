@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -6,11 +6,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-@Table(name = "autor")
+@Table(name = "persona")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Autor implements Serializable {
+public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,10 +25,21 @@ public class Autor implements Serializable {
     @Column(name = "apellido")
     private String apellido;
 
-    @Column(name = "bibliografia")
-    private String bibliografia;
+    @Column(name = "dni")
+    private int dni;
 
 
+	@OneToOne
+    @JoinColumn(unique = true)
+    private Domicilio domicilio;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Domicilio domicilio;
+
+    @OneToMany(mappedBy = "persona")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Libro> libros = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -53,12 +65,40 @@ public class Autor implements Serializable {
         this.apellido = apellido;
     }
 
-    public String getBibliografia() {
-        return bibliografia;
+    public int getDni() {
+        return dni;
     }
 
-    public void setBibliografia(String bibliografia) {
-        this.bibliografia = bibliografia;
+    public void setDni(int dni) {
+        this.dni = dni;
+    }
+
+    public Domicilio getDomicilio() {
+        return domicilio;
+    }
+
+    public void setDomicilio(Domicilio domicilio) {
+        this.domicilio = domicilio;
+    }
+
+	public Set<Libro> getLibros() {
+        return libros;
+    }
+
+    public Persona addLibro(Libro libro) {
+        this.libros.add(libro);
+        job.setPersona(this);
+        return this;
+    }
+
+    public Persona removeLibro(Libro libro) {
+        this.libros.remove(libro);
+        job.setPersona(null);
+        return this;
+    }
+
+    public void setLibros(Set<Libro> libros) {
+        this.libros = libros;
     }
 
     @Override
@@ -66,10 +106,10 @@ public class Autor implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Autor)) {
+        if (!(o instanceof Persona)) {
             return false;
         }
-        return id != null && id.equals(((Autor) o).id);
+        return id != null && id.equals(((Persona) o).id);
     }
 
     @Override
@@ -79,11 +119,11 @@ public class Autor implements Serializable {
 
     @Override
     public String toString() {
-        return "Autor{" +
+        return "Persona{" +
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
             ", apellido='" + getApellido() + "'" +
-            ", bibliografia='" + getBibliografia() + "'" +
+            ", dni='" + getDni() + "'" +
             "}";
     }
 }

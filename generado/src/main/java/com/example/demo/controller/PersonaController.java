@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.PersonaService;
-import BadRequestAlertException;
-import com.example.demo.dto.PersonaDTO;
+import com.example.demo.utils.BadRequestAlertException;
+import com.example.demo.service.dto.PersonaDTO;
 
-import HeaderUtil;
-import PaginationUtil;
-import ResponseUtil;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,7 @@ public class PersonaController {
     }
 
     @PostMapping("/persona")
-    public ResponseEntity<PersonaDTO> createPersona(@Valid @RequestBody personaDTO personaDTO) throws URISyntaxException {
+    public ResponseEntity<PersonaDTO> createPersona(@Valid @RequestBody PersonaDTO personaDTO) throws URISyntaxException {
         log.debug("REST request to save Persona : {}", personaDTO);
         if (personaDTO.getId() != null) {
             throw new BadRequestAlertException("A new persona cannot already have an ID", ENTITY_NAME, "idexists");

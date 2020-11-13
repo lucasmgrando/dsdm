@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.AutorService;
-import BadRequestAlertException;
-import com.example.demo.dto.AutorDTO;
+import com.example.demo.utils.BadRequestAlertException;
+import com.example.demo.service.dto.AutorDTO;
 
-import HeaderUtil;
-import PaginationUtil;
-import ResponseUtil;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,7 @@ public class AutorController {
     }
 
     @PostMapping("/autor")
-    public ResponseEntity<AutorDTO> createAutor(@Valid @RequestBody autorDTO autorDTO) throws URISyntaxException {
+    public ResponseEntity<AutorDTO> createAutor(@Valid @RequestBody AutorDTO autorDTO) throws URISyntaxException {
         log.debug("REST request to save Autor : {}", autorDTO);
         if (autorDTO.getId() != null) {
             throw new BadRequestAlertException("A new autor cannot already have an ID", ENTITY_NAME, "idexists");

@@ -2,7 +2,7 @@ package com.example.demo.service.dto;
 
 import java.io.Serializable;
 
-public class Autor implements Serializable {
+public class AutorDTO implements Serializable {
 
     private Long id;
 

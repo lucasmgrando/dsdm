@@ -2,7 +2,7 @@ package com.example.demo.service.dto;
 
 import java.io.Serializable;
 
-public class Domicilio implements Serializable {
+public class DomicilioDTO implements Serializable {
 
     private Long id;
 

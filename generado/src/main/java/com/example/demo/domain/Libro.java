@@ -1,4 +1,4 @@
-package com.example.demo.entity;
+package com.example.demo.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "libro")
@@ -24,11 +25,6 @@ public class Libro implements Serializable {
     @Column(name = "paginas")
     private int paginas;
 
-    @Column(name = "autor")
-    private String autor;
-
-    @Column(name = "genero")
-    private String genero;
 
     @Column(name = "fecha")
     private int fecha;
@@ -40,7 +36,6 @@ public class Libro implements Serializable {
                joinColumns = @JoinColumn(name = "libro_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"))
     private Set<Autor> autor = new HashSet<>();
-
 
     public Long getId() {
         return id;
@@ -64,14 +59,6 @@ public class Libro implements Serializable {
 
     public void setPaginas(int paginas) {
         this.paginas = paginas;
-    }
-
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
     }
 
     public String getGenero() {
@@ -138,4 +125,3 @@ public class Libro implements Serializable {
             "}";
     }
 }
-
