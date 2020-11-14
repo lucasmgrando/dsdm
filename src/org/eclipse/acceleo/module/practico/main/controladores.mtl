@@ -41,8 +41,7 @@ public class [clase.nombre/]Controller {
 
     private static final String ENTITY_NAME = "[clase.nombre/]";
 
-    @Value("${applicationName}")
-    private String applicationName;
+    private String applicationName = "Practico";
 
     private final [clase.nombre/]Service [clase.nombre.toLowerCase()/]Service;
 
@@ -73,7 +72,8 @@ public class [clase.nombre/]Controller {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, [clase.nombre.toLowerCase()/]DTO.getId().toString()))
             .body(result);
     }
-
+	
+	/*
     @GetMapping("/[clase.nombre.toLowerCase()/]")
     public ResponseEntity<List<[clase.nombre/]DTO>> getAll[clase.nombre/]s(Pageable pageable) {
         log.debug("REST request to get a page of [clase.nombre/]s");
@@ -81,6 +81,7 @@ public class [clase.nombre/]Controller {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+	*/
 
     @GetMapping("/[clase.nombre.toLowerCase()/]/{id}")
     public ResponseEntity<[clase.nombre/]DTO> get[clase.nombre/](@PathVariable Long id) {

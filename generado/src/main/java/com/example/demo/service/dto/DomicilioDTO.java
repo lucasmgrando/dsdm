@@ -1,15 +1,20 @@
 package com.example.demo.service.dto;
 
+import com.example.demo.domain.Domicilio;
+
 import java.io.Serializable;
+import java.util.Set;
+import java.util.HashSet;
+
 
 public class DomicilioDTO implements Serializable {
 
     private Long id;
 
-    private String calle;
+    private String descripcion;
 
-    private int numero;
 
+    private LocalidadDTO localidad;
 
 
     public Long getId() {
@@ -20,23 +25,21 @@ public class DomicilioDTO implements Serializable {
         this.id = id;
     }
 
-    public String getCalle() {
-        return calle;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setCalle(String calle) {
-        this.calle = calle;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public int getNumero() {
-        return numero;
+    public LocalidadDTO getLocalidad() {
+        return localidad;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setLocalidad(LocalidadDTO localidad) {
+        this.localidad = localidad;
     }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -45,7 +48,7 @@ public class DomicilioDTO implements Serializable {
         if (!(o instanceof Domicilio)) {
             return false;
         }
-        return id != null && id.equals(((Domicilio) o).id);
+        return id != null && id.equals(((Domicilio) o).getId());
     }
 
     @Override
@@ -57,9 +60,7 @@ public class DomicilioDTO implements Serializable {
     public String toString() {
         return "Domicilio{" +
             "id=" + getId() +
-            ", calle='" + getCalle() + "'" +
-            ", numero='" + getNumero() + "'" +
-            ", localidadId='" + getLocalidadId() + "'" +
+            ", descripcion='" + getDescripcion() + "'" +
             "}";
     }
 }

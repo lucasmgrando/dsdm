@@ -23,4 +23,6 @@
 [generarPOM(raiz)/]
 [generarConfiguracion(raiz)/]
 [generarBadRequestAlertException(raiz)/]
+[generarErrorConstants(raiz)/]
+[generarSwaggerConfig(raiz)/]
 [/template]

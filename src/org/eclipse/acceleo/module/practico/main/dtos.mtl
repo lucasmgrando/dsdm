@@ -8,7 +8,12 @@
 [file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/service/dto/'+clase.nombre+'DTO.java', false, 'UTF-8')]
 package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto;
 
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].domain.[clase.nombre/];
+
 import java.io.Serializable;
+import java.util.Set;
+import java.util.HashSet;
+
 
 public class [clase.nombre/]DTO implements Serializable {
 
@@ -20,8 +25,12 @@ public class [clase.nombre/]DTO implements Serializable {
 [/for]
 
 [for (r : Relacion | clase.relaciones_contenidas)]
-[if r.multiplicidad = Multiplicidad::oneToOne]
-    private Long [r.destino.nombre.toLowerCase()/]Id;
+[if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
+    private [r.destino.nombre/]DTO [r.destino.nombre.toLowerCase()/];
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::manyToMany]
+    private Set<[r.destino.nombre/]DTO> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
 
 [/if]
 [/for]
@@ -45,16 +54,25 @@ public class [clase.nombre/]DTO implements Serializable {
 
 [/for]
 [for (r : Relacion | clase.relaciones_contenidas)]
-[if r.multiplicidad = Multiplicidad::oneToOne]
-    public Long get[r.destino.nombre/]Id() {
-        return [r.destino.nombre.toLowerCase()/]Id;
+[if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
+    public [r.destino.nombre/]DTO get[r.destino.nombre/]() {
+        return [r.destino.nombre.toLowerCase()/];
     }
 
-    public void set[r.destino.nombre/]Id(Long [r.destino.nombre.toLowerCase()/]Id) {
-        this.[r.destino.nombre.toLowerCase()/]Id = [r.destino.nombre.toLowerCase()/]Id;
+    public void set[r.destino.nombre/]([r.destino.nombre/]DTO [r.destino.nombre.toLowerCase()/]) {
+        this.[r.destino.nombre.toLowerCase()/] = [r.destino.nombre.toLowerCase()/];
     }
 [/if]
+[if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::oneToMany]
+    public Set<[r.destino.nombre/]DTO> get[r.destino.nombre/]s() {
+        return [r.destino.nombre.toLowerCase()/]s;
+    }
 
+    public void set[r.destino.nombre/]s(Set<[r.destino.nombre/]DTO> [r.destino.nombre.toLowerCase()/]s) {
+        this.[r.destino.nombre.toLowerCase()/]s = [r.destino.nombre.toLowerCase()/]s;
+    }
+
+[/if]
 [/for]
     @Override
     public boolean equals(Object o) {
@@ -64,7 +82,7 @@ public class [clase.nombre/]DTO implements Serializable {
         if (!(o instanceof [clase.nombre/])) {
             return false;
         }
-        return id != null && id.equals((([clase.nombre/]) o).id);
+        return id != null && id.equals((([clase.nombre/]) o).getId());
     }
 
     @Override
@@ -78,9 +96,6 @@ public class [clase.nombre/]DTO implements Serializable {
             "id=" + getId() +
 [for (a : Atributo | clase.atributos_contenidos)]
             ", [a.nombre/]='" + get[a.nombre.toUpperFirst()/]() + "'" +
-[/for]
-[for (r : Relacion | clase.relaciones_contenidas)]
-            ", [r.destino.nombre.toLowerCase()/]Id='" + get[r.destino.nombre/]Id() + "'" +
 [/for]
             "}";
     }

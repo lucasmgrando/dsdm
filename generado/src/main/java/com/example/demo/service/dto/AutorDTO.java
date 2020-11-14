@@ -1,6 +1,11 @@
 package com.example.demo.service.dto;
 
+import com.example.demo.domain.Autor;
+
 import java.io.Serializable;
+import java.util.Set;
+import java.util.HashSet;
+
 
 public class AutorDTO implements Serializable {
 
@@ -10,8 +15,8 @@ public class AutorDTO implements Serializable {
 
     private String apellido;
 
-    private String bibliografia;
 
+    private DomicilioDTO domicilio;
 
 
     public Long getId() {
@@ -38,14 +43,13 @@ public class AutorDTO implements Serializable {
         this.apellido = apellido;
     }
 
-    public String getBibliografia() {
-        return bibliografia;
+    public DomicilioDTO getDomicilio() {
+        return domicilio;
     }
 
-    public void setBibliografia(String bibliografia) {
-        this.bibliografia = bibliografia;
+    public void setDomicilio(DomicilioDTO domicilio) {
+        this.domicilio = domicilio;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -54,7 +58,7 @@ public class AutorDTO implements Serializable {
         if (!(o instanceof Autor)) {
             return false;
         }
-        return id != null && id.equals(((Autor) o).id);
+        return id != null && id.equals(((Autor) o).getId());
     }
 
     @Override
@@ -68,7 +72,6 @@ public class AutorDTO implements Serializable {
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
             ", apellido='" + getApellido() + "'" +
-            ", bibliografia='" + getBibliografia() + "'" +
             "}";
     }
 }

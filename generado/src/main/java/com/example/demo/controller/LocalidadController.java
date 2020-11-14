@@ -32,8 +32,7 @@ public class LocalidadController {
 
     private static final String ENTITY_NAME = "Localidad";
 
-    @Value("${applicationName}")
-    private String applicationName;
+    private String applicationName = "Practico";
 
     private final LocalidadService localidadService;
 
@@ -64,7 +63,8 @@ public class LocalidadController {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, localidadDTO.getId().toString()))
             .body(result);
     }
-
+	
+	/*
     @GetMapping("/localidad")
     public ResponseEntity<List<LocalidadDTO>> getAllLocalidads(Pageable pageable) {
         log.debug("REST request to get a page of Localidads");
@@ -72,6 +72,7 @@ public class LocalidadController {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+	*/
 
     @GetMapping("/localidad/{id}")
     public ResponseEntity<LocalidadDTO> getLocalidad(@PathVariable Long id) {

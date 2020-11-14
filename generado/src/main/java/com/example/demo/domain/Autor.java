@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "autor")
@@ -16,7 +18,7 @@ public class Autor implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @Column(name = "nombre")
@@ -25,9 +27,10 @@ public class Autor implements Serializable {
     @Column(name = "apellido")
     private String apellido;
 
-    @Column(name = "bibliografia")
-    private String bibliografia;
 
+	@OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(unique = true)
+    private Domicilio domicilio;
 
     public Long getId() {
         return id;
@@ -53,12 +56,12 @@ public class Autor implements Serializable {
         this.apellido = apellido;
     }
 
-    public String getBibliografia() {
-        return bibliografia;
+    public Domicilio getDomicilio() {
+        return domicilio;
     }
 
-    public void setBibliografia(String bibliografia) {
-        this.bibliografia = bibliografia;
+    public void setDomicilio(Domicilio domicilio) {
+        this.domicilio = domicilio;
     }
 
     @Override
@@ -69,7 +72,7 @@ public class Autor implements Serializable {
         if (!(o instanceof Autor)) {
             return false;
         }
-        return id != null && id.equals(((Autor) o).id);
+        return id != null && id.equals(((Autor) o).getId());
     }
 
     @Override
@@ -83,7 +86,6 @@ public class Autor implements Serializable {
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
             ", apellido='" + getApellido() + "'" +
-            ", bibliografia='" + getBibliografia() + "'" +
             "}";
     }
 }

@@ -1,28 +1,20 @@
-package com.example.demo.domain;
+package com.example.demo.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
+import com.example.demo.domain.Provincia;
 
 import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
-@Entity
-@Table(name = "localidad")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Localidad implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+public class ProvinciaDTO implements Serializable {
 
-    @Id
-    @GeneratedValue
     private Long id;
 
-    @Column(name = "descripcion")
     private String descripcion;
+
+
+    private Set<LocalidadDTO> localidads = new HashSet<>();
 
 
     public Long getId() {
@@ -41,15 +33,23 @@ public class Localidad implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public Set<LocalidadDTO> getLocalidads() {
+        return localidads;
+    }
+
+    public void setLocalidads(Set<LocalidadDTO> localidads) {
+        this.localidads = localidads;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Localidad)) {
+        if (!(o instanceof Provincia)) {
             return false;
         }
-        return id != null && id.equals(((Localidad) o).getId());
+        return id != null && id.equals(((Provincia) o).getId());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Localidad implements Serializable {
 
     @Override
     public String toString() {
-        return "Localidad{" +
+        return "Provincia{" +
             "id=" + getId() +
             ", descripcion='" + getDescripcion() + "'" +
             "}";

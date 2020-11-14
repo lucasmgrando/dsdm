@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "domicilio")
+@Table(name = "provincia")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Domicilio implements Serializable {
+public class Provincia implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,9 +25,9 @@ public class Domicilio implements Serializable {
     private String descripcion;
 
 
-    @ManyToOne(cascade=CascadeType.ALL)
-    @JsonIgnoreProperties(value = "domicilios", allowSetters = true)
-    private Localidad localidad;
+    @OneToMany(mappedBy = "provincia")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Localidad> localidads = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -45,12 +45,24 @@ public class Domicilio implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Localidad getLocalidad() {
-        return localidad;
+	public Set<Localidad> getLocalidads() {
+        return localidads;
     }
 
-    public void setLocalidad(Localidad localidad) {
-        this.localidad = localidad;
+    public Provincia addLocalidad(Localidad localidad) {
+        this.localidads.add(localidad);
+        // localidad.setProvincia(this);
+        return this;
+    }
+
+    public Provincia removeLocalidad(Localidad localidad) {
+        this.localidads.remove(localidad);
+        // localidad.setProvincia(null);
+        return this;
+    }
+
+    public void setLocalidads(Set<Localidad> localidads) {
+        this.localidads = localidads;
     }
 
     @Override
@@ -58,10 +70,10 @@ public class Domicilio implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Domicilio)) {
+        if (!(o instanceof Provincia)) {
             return false;
         }
-        return id != null && id.equals(((Domicilio) o).getId());
+        return id != null && id.equals(((Provincia) o).getId());
     }
 
     @Override
@@ -71,7 +83,7 @@ public class Domicilio implements Serializable {
 
     @Override
     public String toString() {
-        return "Domicilio{" +
+        return "Provincia{" +
             "id=" + getId() +
             ", descripcion='" + getDescripcion() + "'" +
             "}";

@@ -23,12 +23,29 @@ import org.mapstruct.*;
 public interface [clase.nombre/]Mapper extends EntityMapper<[clase.nombre/]DTO, [clase.nombre/]> {
 	
 [for (r : Relacion | clase.relaciones_contenidas)]
-    @Mapping(source = "[r.destino.nombre.toLowerCase()/].id", target = "[r.destino.nombre.toLowerCase()/]Id")
+[if r.multiplicidad = Multiplicidad::oneToOne ]
+    // @Mapping(source = "[r.destino.nombre.toLowerCase()/].id", target = "[r.destino.nombre.toLowerCase()/]Id")
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToOne ]
+    // @Mapping(source = "[r.destino.nombre.toLowerCase()/].id", target = "[r.destino.nombre.toLowerCase()/]Id")
+[/if]
 [/for]
     [clase.nombre/]DTO toDto([clase.nombre/] [clase.nombre.toLowerCase()/]);
 
 [for (r : Relacion | clase.relaciones_contenidas)]
-    @Mapping(source = "[r.destino.nombre.toLowerCase()/]Id", target = "[r.destino.nombre.toLowerCase()/]")
+[if r.multiplicidad = Multiplicidad::oneToOne ]
+    // @Mapping(source = "[r.destino.nombre.toLowerCase()/]Id", target = "[r.destino.nombre.toLowerCase()/]")
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany ]
+    @Mapping(target = "[r.destino.nombre.toLowerCase()/]s", ignore = true)
+    @Mapping(target = "remove[r.destino.nombre/]", ignore = true)
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToOne ]
+    // @Mapping(source = "[r.destino.nombre.toLowerCase()/]Id", target = "[r.destino.nombre.toLowerCase()/]")
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToMany ]
+    @Mapping(target = "remove[r.destino.nombre/]", ignore = true)
+[/if]
 [/for]
     [clase.nombre/] toEntity([clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO);
 

@@ -32,8 +32,7 @@ public class AutorController {
 
     private static final String ENTITY_NAME = "Autor";
 
-    @Value("${applicationName}")
-    private String applicationName;
+    private String applicationName = "Practico";
 
     private final AutorService autorService;
 
@@ -64,7 +63,8 @@ public class AutorController {
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, autorDTO.getId().toString()))
             .body(result);
     }
-
+	
+	/*
     @GetMapping("/autor")
     public ResponseEntity<List<AutorDTO>> getAllAutors(Pageable pageable) {
         log.debug("REST request to get a page of Autors");
@@ -72,6 +72,7 @@ public class AutorController {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+	*/
 
     @GetMapping("/autor/{id}")
     public ResponseEntity<AutorDTO> getAutor(@PathVariable Long id) {

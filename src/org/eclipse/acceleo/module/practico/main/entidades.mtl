@@ -8,6 +8,7 @@
 [file ('src/main/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/domain/'+clase.nombre+'.java', false, 'UTF-8')]
 package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -15,6 +16,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "[clase.nombre.toLowerCase()/]")
@@ -24,7 +26,7 @@ public class [clase.nombre/] implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
 [for (a : Atributo | clase.atributos_contenidos)]
@@ -35,19 +37,13 @@ public class [clase.nombre/] implements Serializable {
 
 [for (r : Relacion | clase.relaciones_contenidas)]
 [if r.multiplicidad = Multiplicidad::oneToOne and clase.nombre = r.origen.nombre]
-	@OneToOne
-    @JoinColumn(unique = true)
-    private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
-
-[/if]
-[if r.multiplicidad = Multiplicidad::oneToOne and clase.nombre = r.origen.nombre]
-    @OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(unique = true)
     private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToOne and clase.nombre = r.origen.nombre]
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.ALL)
     @JsonIgnoreProperties(value = "[r.origen.nombre.toLowerCase()/]s", allowSetters = true)
     private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
 
@@ -76,14 +72,14 @@ public class [clase.nombre/] implements Serializable {
     @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
                joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "[r.destino.nombre.toLowerCase()/]_id", referencedColumnName = "id"))
-    private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/] = new HashSet<>();
+    private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.destino.nombre]
     @ManyToMany(mappedBy = "[r.destino.nombre.toLowerCase()/]")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnore
-    private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/] = new HashSet<>();
+    private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/]s = new HashSet<>();
 
 [/if]
 [/for]
@@ -123,13 +119,13 @@ public class [clase.nombre/] implements Serializable {
 
     public [r.origen.nombre/] add[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
         this.[r.destino.nombre.toLowerCase()/]s.add([r.destino.nombre.toLowerCase()/]);
-        job.set[r.origen.nombre/](this);
+        // [r.destino.nombre.toLowerCase()/].set[r.origen.nombre/](this);
         return this;
     }
 
     public [r.origen.nombre/] remove[r.destino.nombre/]([r.destino.nombre/] [r.destino.nombre.toLowerCase()/]) {
         this.[r.destino.nombre.toLowerCase()/]s.remove([r.destino.nombre.toLowerCase()/]);
-        job.set[r.origen.nombre/](null);
+        // [r.destino.nombre.toLowerCase()/].set[r.origen.nombre/](null);
         return this;
     }
 
@@ -157,7 +153,7 @@ public class [clase.nombre/] implements Serializable {
         if (!(o instanceof [clase.nombre/])) {
             return false;
         }
-        return id != null && id.equals((([clase.nombre/]) o).id);
+        return id != null && id.equals((([clase.nombre/]) o).getId());
     }
 
     @Override
