@@ -14,7 +14,7 @@ public class DomicilioDTO implements Serializable {
     private String descripcion;
 
 
-    private LocalidadDTO localidad;
+    private Long localidadId;
 
 
     public Long getId() {
@@ -33,12 +33,12 @@ public class DomicilioDTO implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public LocalidadDTO getLocalidad() {
-        return localidad;
+    public Long getlocalidadId() {
+        return localidadId;
     }
 
-    public void setLocalidad(LocalidadDTO localidad) {
-        this.localidad = localidad;
+    public void setLocalidadId(Long localidadId) {
+        this.localidadId = localidadId;
     }
     @Override
     public boolean equals(Object o) {

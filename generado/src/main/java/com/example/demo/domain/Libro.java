@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "localidad")
+@Table(name = "libro")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Localidad implements Serializable {
+public class Libro implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,13 +21,9 @@ public class Localidad implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "descripcion")
-    private String descripcion;
+    @Column(name = "titulo")
+    private String titulo;
 
-
-    @ManyToOne(cascade=CascadeType.MERGE)
-    @JsonIgnoreProperties(value = "localidads", allowSetters = true)
-    private Provincia provincia;
 
     public Long getId() {
         return id;
@@ -37,20 +33,12 @@ public class Localidad implements Serializable {
         this.id = id;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Provincia getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(Provincia provincia) {
-        this.provincia = provincia;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     @Override
@@ -58,10 +46,10 @@ public class Localidad implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Localidad)) {
+        if (!(o instanceof Libro)) {
             return false;
         }
-        return id != null && id.equals(((Localidad) o).getId());
+        return id != null && id.equals(((Libro) o).getId());
     }
 
     @Override
@@ -71,9 +59,10 @@ public class Localidad implements Serializable {
 
     @Override
     public String toString() {
-        return "Localidad{" +
+        return "Libro{" +
             "id=" + getId() +
-            ", descripcion='" + getDescripcion() + "'" +
+            ", titulo='" + getTitulo() + "'" +
             "}";
     }
 }
+

@@ -18,6 +18,8 @@ public class AutorDTO implements Serializable {
 
     private DomicilioDTO domicilio;
 
+    private Set<LibroDTO> libros = new HashSet<>();
+
 
     public Long getId() {
         return id;
@@ -50,6 +52,14 @@ public class AutorDTO implements Serializable {
     public void setDomicilio(DomicilioDTO domicilio) {
         this.domicilio = domicilio;
     }
+    public Set<LibroDTO> getLibros() {
+        return libros;
+    }
+
+    public void setLibros(Set<LibroDTO> libros) {
+        this.libros = libros;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

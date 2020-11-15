@@ -49,13 +49,13 @@ public class [clase.nombre/] implements Serializable {
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToOne and clase.nombre = r.destino.nombre]
-    @OneToMany(mappedBy = "employee")
+    @OneToMany(mappedBy = "")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/]s = new HashSet<>();
 
 [/if]
 [if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.origen.nombre]
-    @OneToMany(mappedBy = "[r.origen.nombre.toLowerCase()/]")
+    @OneToMany(cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
 
@@ -67,7 +67,7 @@ public class [clase.nombre/] implements Serializable {
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.origen.nombre]
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
                joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),

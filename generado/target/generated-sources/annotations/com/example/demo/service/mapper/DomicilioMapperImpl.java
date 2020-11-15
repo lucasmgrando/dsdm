@@ -1,6 +1,7 @@
 package com.example.demo.service.mapper;
 
 import com.example.demo.domain.Domicilio;
+import com.example.demo.domain.Localidad;
 import com.example.demo.service.dto.DomicilioDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-11-14T20:00:33-0300",
+    date = "2020-11-15T13:08:44-0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 1.8.0_212 (BellSoft)"
 )
 @Component
@@ -55,9 +56,9 @@ public class DomicilioMapperImpl implements DomicilioMapper {
 
         DomicilioDTO domicilioDTO = new DomicilioDTO();
 
+        domicilioDTO.setLocalidadId( domicilioLocalidadId( domicilio ) );
         domicilioDTO.setId( domicilio.getId() );
         domicilioDTO.setDescripcion( domicilio.getDescripcion() );
-        domicilioDTO.setLocalidad( localidadMapper.toDto( domicilio.getLocalidad() ) );
 
         return domicilioDTO;
     }
@@ -70,10 +71,25 @@ public class DomicilioMapperImpl implements DomicilioMapper {
 
         Domicilio domicilio = new Domicilio();
 
+        domicilio.setLocalidad( localidadMapper.fromId( domicilioDTO.getlocalidadId() ) );
         domicilio.setId( domicilioDTO.getId() );
         domicilio.setDescripcion( domicilioDTO.getDescripcion() );
-        domicilio.setLocalidad( localidadMapper.toEntity( domicilioDTO.getLocalidad() ) );
 
         return domicilio;
+    }
+
+    private Long domicilioLocalidadId(Domicilio domicilio) {
+        if ( domicilio == null ) {
+            return null;
+        }
+        Localidad localidad = domicilio.getLocalidad();
+        if ( localidad == null ) {
+            return null;
+        }
+        Long id = localidad.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
     }
 }

@@ -8,14 +8,15 @@ import org.mapstruct.*;
 
 
 @Mapper(componentModel = "spring", uses = {
-LocalidadMapper.class,
+ZonaMapper.class,
+PaisMapper.class,
 })
 public interface ProvinciaMapper extends EntityMapper<ProvinciaDTO, Provincia> {
 	
+    @Mapping(source = "pais.id", target = "paisId")
     ProvinciaDTO toDto(Provincia provincia);
 
-    @Mapping(target = "localidads", ignore = true)
-    @Mapping(target = "removeLocalidad", ignore = true)
+    @Mapping(source = "paisId", target = "pais")
     Provincia toEntity(ProvinciaDTO provinciaDTO);
 
     default Provincia fromId(Long id) {

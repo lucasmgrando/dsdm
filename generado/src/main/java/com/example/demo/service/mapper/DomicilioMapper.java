@@ -12,10 +12,10 @@ LocalidadMapper.class,
 })
 public interface DomicilioMapper extends EntityMapper<DomicilioDTO, Domicilio> {
 	
-    // @Mapping(source = "localidad.id", target = "localidadId")
+    @Mapping(source = "localidad.id", target = "localidadId")
     DomicilioDTO toDto(Domicilio domicilio);
 
-    // @Mapping(source = "localidadId", target = "localidad")
+    @Mapping(source = "localidadId", target = "localidad")
     Domicilio toEntity(DomicilioDTO domicilioDTO);
 
     default Domicilio fromId(Long id) {

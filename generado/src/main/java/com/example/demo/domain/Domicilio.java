@@ -25,7 +25,7 @@ public class Domicilio implements Serializable {
     private String descripcion;
 
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JsonIgnoreProperties(value = "domicilios", allowSetters = true)
     private Localidad localidad;
 
@@ -77,4 +77,3 @@ public class Domicilio implements Serializable {
             "}";
     }
 }
-

@@ -25,9 +25,13 @@ public class Provincia implements Serializable {
     private String descripcion;
 
 
-    @OneToMany(mappedBy = "provincia")
+    @OneToMany(cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<Localidad> localidads = new HashSet<>();
+    private Set<Zona> zonas = new HashSet<>();
+
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JsonIgnoreProperties(value = "provincias", allowSetters = true)
+    private Pais pais;
 
     public Long getId() {
         return id;
@@ -45,24 +49,32 @@ public class Provincia implements Serializable {
         this.descripcion = descripcion;
     }
 
-	public Set<Localidad> getLocalidads() {
-        return localidads;
+	public Set<Zona> getZonas() {
+        return zonas;
     }
 
-    public Provincia addLocalidad(Localidad localidad) {
-        this.localidads.add(localidad);
-        // localidad.setProvincia(this);
+    public Provincia addZona(Zona zona) {
+        this.zonas.add(zona);
+        // zona.setProvincia(this);
         return this;
     }
 
-    public Provincia removeLocalidad(Localidad localidad) {
-        this.localidads.remove(localidad);
-        // localidad.setProvincia(null);
+    public Provincia removeZona(Zona zona) {
+        this.zonas.remove(zona);
+        // zona.setProvincia(null);
         return this;
     }
 
-    public void setLocalidads(Set<Localidad> localidads) {
-        this.localidads = localidads;
+    public void setZonas(Set<Zona> zonas) {
+        this.zonas = zonas;
+    }
+
+    public Pais getPais() {
+        return pais;
+    }
+
+    public void setPais(Pais pais) {
+        this.pais = pais;
     }
 
     @Override
@@ -89,4 +101,3 @@ public class Provincia implements Serializable {
             "}";
     }
 }
-

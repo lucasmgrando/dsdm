@@ -32,6 +32,13 @@ public class Autor implements Serializable {
     @JoinColumn(unique = true)
     private Domicilio domicilio;
 
+	@ManyToMany(cascade=CascadeType.ALL)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(name = "autor_libro",
+               joinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "libro_id", referencedColumnName = "id"))
+    private Set<Libro> libros = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -64,6 +71,26 @@ public class Autor implements Serializable {
         this.domicilio = domicilio;
     }
 
+	public Set<Libro> getLibros() {
+        return libros;
+    }
+
+    public Autor addLibro(Libro libro) {
+        this.libros.add(libro);
+        // libro.setAutor(this);
+        return this;
+    }
+
+    public Autor removeLibro(Libro libro) {
+        this.libros.remove(libro);
+        // libro.setAutor(null);
+        return this;
+    }
+
+    public void setLibros(Set<Libro> libros) {
+        this.libros = libros;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -89,4 +116,3 @@ public class Autor implements Serializable {
             "}";
     }
 }
-

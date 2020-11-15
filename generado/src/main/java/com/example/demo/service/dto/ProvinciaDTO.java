@@ -14,7 +14,9 @@ public class ProvinciaDTO implements Serializable {
     private String descripcion;
 
 
-    private Set<LocalidadDTO> localidads = new HashSet<>();
+    private Set<ZonaDTO> zonas = new HashSet<>();
+
+    private Long paisId;
 
 
     public Long getId() {
@@ -33,14 +35,21 @@ public class ProvinciaDTO implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Set<LocalidadDTO> getLocalidads() {
-        return localidads;
+    public Set<ZonaDTO> getZonas() {
+        return zonas;
     }
 
-    public void setLocalidads(Set<LocalidadDTO> localidads) {
-        this.localidads = localidads;
+    public void setZonas(Set<ZonaDTO> zonas) {
+        this.zonas = zonas;
     }
 
+    public Long getpaisId() {
+        return paisId;
+    }
+
+    public void setPaisId(Long paisId) {
+        this.paisId = paisId;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

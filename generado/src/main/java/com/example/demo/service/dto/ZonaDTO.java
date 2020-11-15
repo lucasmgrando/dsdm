@@ -1,20 +1,18 @@
 package com.example.demo.service.dto;
 
-import com.example.demo.domain.Localidad;
+import com.example.demo.domain.Zona;
 
 import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
 
-public class LocalidadDTO implements Serializable {
+public class ZonaDTO implements Serializable {
 
     private Long id;
 
     private String descripcion;
 
-
-    private Long provinciaId;
 
 
     public Long getId() {
@@ -33,22 +31,15 @@ public class LocalidadDTO implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Long getprovinciaId() {
-        return provinciaId;
-    }
-
-    public void setProvinciaId(Long provinciaId) {
-        this.provinciaId = provinciaId;
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Localidad)) {
+        if (!(o instanceof Zona)) {
             return false;
         }
-        return id != null && id.equals(((Localidad) o).getId());
+        return id != null && id.equals(((Zona) o).getId());
     }
 
     @Override
@@ -58,7 +49,7 @@ public class LocalidadDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "Localidad{" +
+        return "Zona{" +
             "id=" + getId() +
             ", descripcion='" + getDescripcion() + "'" +
             "}";

@@ -25,6 +25,7 @@ public class [clase.nombre/]DTO implements Serializable {
 [/for]
 
 [for (r : Relacion | clase.relaciones_contenidas)]
+[if r.tipo = TipoRelacion::composicion ]
 [if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
     private [r.destino.nombre/]DTO [r.destino.nombre.toLowerCase()/];
 
@@ -32,6 +33,17 @@ public class [clase.nombre/]DTO implements Serializable {
 [if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::manyToMany]
     private Set<[r.destino.nombre/]DTO> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
 
+[/if]
+[/if]
+[if r.tipo <> TipoRelacion::composicion ]
+[if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
+    private Long [r.destino.nombre.toLowerCase()/]Id;
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::manyToMany]
+    private Set<[r.destino.nombre/]DTO> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
 [/if]
 [/for]
 
@@ -54,6 +66,7 @@ public class [clase.nombre/]DTO implements Serializable {
 
 [/for]
 [for (r : Relacion | clase.relaciones_contenidas)]
+[if r.tipo = TipoRelacion::composicion ]
 [if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
     public [r.destino.nombre/]DTO get[r.destino.nombre/]() {
         return [r.destino.nombre.toLowerCase()/];
@@ -63,7 +76,7 @@ public class [clase.nombre/]DTO implements Serializable {
         this.[r.destino.nombre.toLowerCase()/] = [r.destino.nombre.toLowerCase()/];
     }
 [/if]
-[if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::oneToMany]
+[if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::manyToMany]
     public Set<[r.destino.nombre/]DTO> get[r.destino.nombre/]s() {
         return [r.destino.nombre.toLowerCase()/]s;
     }
@@ -72,6 +85,28 @@ public class [clase.nombre/]DTO implements Serializable {
         this.[r.destino.nombre.toLowerCase()/]s = [r.destino.nombre.toLowerCase()/]s;
     }
 
+[/if]
+[/if]
+[if r.tipo <> TipoRelacion::composicion ]
+[if r.multiplicidad = Multiplicidad::oneToOne or r.multiplicidad = Multiplicidad::manyToOne]
+    public Long get[r.destino.nombre.toLowerCase()/]Id() {
+        return [r.destino.nombre.toLowerCase()/]Id;
+    }
+
+    public void set[r.destino.nombre/]Id(Long [r.destino.nombre.toLowerCase()/]Id) {
+        this.[r.destino.nombre.toLowerCase()/]Id = [r.destino.nombre.toLowerCase()/]Id;
+    }
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany or r.multiplicidad = Multiplicidad::manyToMany]
+    public Set<[r.destino.nombre/]DTO> get[r.destino.nombre/]s() {
+        return [r.destino.nombre.toLowerCase()/]s;
+    }
+
+    public void set[r.destino.nombre/]s(Set<[r.destino.nombre/]DTO> [r.destino.nombre.toLowerCase()/]s) {
+        this.[r.destino.nombre.toLowerCase()/]s = [r.destino.nombre.toLowerCase()/]s;
+    }
+
+[/if]
 [/if]
 [/for]
     @Override
