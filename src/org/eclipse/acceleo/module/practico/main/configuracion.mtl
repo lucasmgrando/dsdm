@@ -10,6 +10,6 @@ spring.datasource.username=[raiz.configuraciondb.dbUsuario/]
 spring.datasource.password=[raiz.configuraciondb.dbContrasena/]
 
 spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.hibernate.ddl-auto=update
 [/file]
 [/template]

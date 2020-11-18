@@ -3,7 +3,6 @@ com/example/demo/service/DomicilioService.class
 com/example/demo/domain/Provincia.class
 com/example/demo/service/mapper/ProvinciaMapperImpl.class
 com/example/demo/repository/AutorRepository.class
-com/example/demo/controller/DomicilioController.class
 com/example/demo/Demo.class
 com/example/demo/service/mapper/LocalidadMapper.class
 com/example/demo/service/mapper/LocalidadMapperImpl.class
@@ -51,4 +50,3 @@ com/example/demo/service/dto/PaisDTO.class
 com/example/demo/domain/Domicilio.class
 com/example/demo/service/dto/DomicilioDTO.class
 com/example/demo/repository/DomicilioRepository.class
-com/example/demo/controller/ZonaController.class

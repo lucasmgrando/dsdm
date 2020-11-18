@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
+@Audited
 @Entity
 @Table(name = "libro")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)

@@ -3,6 +3,7 @@ package com.example.demo.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
+@Audited
 @Entity
 @Table(name = "autor")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -24,15 +26,12 @@ public class Autor implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @Column(name = "apellido")
-    private String apellido;
-
 
 	@OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(unique = true)
     private Domicilio domicilio;
 
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "autor_libro",
                joinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"),
@@ -53,14 +52,6 @@ public class Autor implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 
     public Domicilio getDomicilio() {
@@ -112,7 +103,7 @@ public class Autor implements Serializable {
         return "Autor{" +
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
-            ", apellido='" + getApellido() + "'" +
             "}";
     }
 }
+

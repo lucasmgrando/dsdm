@@ -13,8 +13,6 @@ public class AutorDTO implements Serializable {
 
     private String nombre;
 
-    private String apellido;
-
 
     private DomicilioDTO domicilio;
 
@@ -35,14 +33,6 @@ public class AutorDTO implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 
     public DomicilioDTO getDomicilio() {
@@ -81,7 +71,6 @@ public class AutorDTO implements Serializable {
         return "Autor{" +
             "id=" + getId() +
             ", nombre='" + getNombre() + "'" +
-            ", apellido='" + getApellido() + "'" +
             "}";
     }
 }

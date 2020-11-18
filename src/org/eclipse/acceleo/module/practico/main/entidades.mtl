@@ -11,6 +11,7 @@ package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactot
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -18,6 +19,9 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
+[if clase.esAuditable]
+@Audited
+[/if]
 @Entity
 @Table(name = "[clase.nombre.toLowerCase()/]")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -36,6 +40,7 @@ public class [clase.nombre/] implements Serializable {
 [/for]
 
 [for (r : Relacion | clase.relaciones_contenidas)]
+[if r.tipo = TipoRelacion::composicion ]
 [if r.multiplicidad = Multiplicidad::oneToOne and clase.nombre = r.origen.nombre]
 	@OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(unique = true)
@@ -67,7 +72,7 @@ public class [clase.nombre/] implements Serializable {
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.origen.nombre]
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
                joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),
@@ -81,6 +86,55 @@ public class [clase.nombre/] implements Serializable {
     @JsonIgnore
     private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/]s = new HashSet<>();
 
+[/if]
+[/if]
+[if r.tipo <> TipoRelacion::composicion ]
+[if r.multiplicidad = Multiplicidad::oneToOne and clase.nombre = r.origen.nombre]
+	@OneToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(unique = true)
+    private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToOne and clase.nombre = r.origen.nombre]
+    @ManyToOne(cascade=CascadeType.MERGE)
+    @JsonIgnoreProperties(value = "[r.origen.nombre.toLowerCase()/]s", allowSetters = true)
+    private [r.destino.nombre/] [r.destino.nombre.toLowerCase()/];
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToOne and clase.nombre = r.destino.nombre]
+    @OneToMany(mappedBy = "")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.origen.nombre]
+    @OneToMany(cascade=CascadeType.MERGE)
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
+[if r.multiplicidad = Multiplicidad::oneToMany and clase.nombre = r.destino.nombre]
+    @ManyToOne
+    @JsonIgnoreProperties(value = "[r.origen.nombre.toLowerCase()/]s", allowSetters = true)
+    private [r.origen.nombre/] [r.origen.nombre.toLowerCase()/];
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.origen.nombre]
+	@ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
+               joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "[r.destino.nombre.toLowerCase()/]_id", referencedColumnName = "id"))
+    private Set<[r.destino.nombre/]> [r.destino.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
+[if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.destino.nombre]
+    @ManyToMany(mappedBy = "[r.destino.nombre.toLowerCase()/]")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<[r.origen.nombre/]> [r.origen.nombre.toLowerCase()/]s = new HashSet<>();
+
+[/if]
 [/if]
 [/for]
     public Long getId() {

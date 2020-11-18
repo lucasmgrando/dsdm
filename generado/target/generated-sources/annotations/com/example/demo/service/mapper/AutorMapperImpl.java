@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-11-15T13:08:44-0300",
+    date = "2020-11-17T21:23:39-0300",
     comments = "version: 1.3.1.Final, compiler: javac, environment: Java 1.8.0_212 (BellSoft)"
 )
 @Component
@@ -63,7 +63,6 @@ public class AutorMapperImpl implements AutorMapper {
 
         autorDTO.setId( autor.getId() );
         autorDTO.setNombre( autor.getNombre() );
-        autorDTO.setApellido( autor.getApellido() );
         autorDTO.setDomicilio( domicilioMapper.toDto( autor.getDomicilio() ) );
         autorDTO.setLibros( libroSetToLibroDTOSet( autor.getLibros() ) );
 
@@ -80,7 +79,6 @@ public class AutorMapperImpl implements AutorMapper {
 
         autor.setId( autorDTO.getId() );
         autor.setNombre( autorDTO.getNombre() );
-        autor.setApellido( autorDTO.getApellido() );
         autor.setDomicilio( domicilioMapper.toEntity( autorDTO.getDomicilio() ) );
         autor.setLibros( libroDTOSetToLibroSet( autorDTO.getLibros() ) );
 
