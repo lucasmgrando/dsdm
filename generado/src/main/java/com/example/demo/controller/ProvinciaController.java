@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -64,15 +66,17 @@ public class ProvinciaController {
             .body(result);
     }
 	
-	/*
+	
     @GetMapping("/provincia")
-    public ResponseEntity<List<ProvinciaDTO>> getAllProvincias(Pageable pageable) {
+    public ResponseEntity<List<ProvinciaDTO>> getAllProvincias(@RequestParam(value = "page", defaultValue = "0") int pageNumber,
+		@RequestParam(value = "size", defaultValue = "10") int pageSize) {
         log.debug("REST request to get a page of Provincias");
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<ProvinciaDTO> page =provinciaService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
-	*/
+	
 
     @GetMapping("/provincia/{id}")
     public ResponseEntity<ProvinciaDTO> getProvincia(@PathVariable Long id) {

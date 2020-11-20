@@ -9,6 +9,7 @@
 [import org::eclipse::acceleo::module::practico::main::dtos /]
 [import org::eclipse::acceleo::module::practico::main::build /]
 [import org::eclipse::acceleo::module::practico::main::configuracion /]
+[import org::eclipse::acceleo::module::practico::main::pruebas /]
 
 [template public generate(raiz : DiagramaClases)]
 [comment @main/]
@@ -25,4 +26,6 @@
 [generarBadRequestAlertException(raiz)/]
 [generarErrorConstants(raiz)/]
 [generarSwaggerConfig(raiz)/]
+[generarTestUtil(raiz)/]
+[generarPruebasUnitarias(raiz)/]
 [/template]

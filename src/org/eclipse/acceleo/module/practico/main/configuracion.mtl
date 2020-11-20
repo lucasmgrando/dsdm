@@ -10,6 +10,18 @@ spring.datasource.username=[raiz.configuraciondb.dbUsuario/]
 spring.datasource.password=[raiz.configuraciondb.dbContrasena/]
 
 spring.jpa.show-sql=true
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=create-drop
+
+server.port=[raiz.configuraciondb.serverPuerto/]
+
+[for (i : ConfiguracionMicroservicios| raiz.configuracionmicroservicios)]
+	eureka.instance.instance-id=${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+	eureka.client.service-url.defaultZone=http://[i.ipDiscovery/]:[i.puertoDiscovery/]/eureka
+[/for]
+[/file]
+
+[file ('src/test/resources/application.properties', false, 'UTF-8')]
+
 [/file]
 [/template]

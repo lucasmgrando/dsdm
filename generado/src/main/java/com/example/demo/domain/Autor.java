@@ -31,7 +31,7 @@ public class Autor implements Serializable {
     @JoinColumn(unique = true)
     private Domicilio domicilio;
 
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "autor_libro",
                joinColumns = @JoinColumn(name = "autor_id", referencedColumnName = "id"),

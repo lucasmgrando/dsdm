@@ -1,0 +1,199 @@
+[comment encoding = UTF-8 /]
+[module pruebas('http://www.example.org/diagramaClasesCompleto')]
+
+[template public generarPruebasUnitarias(raiz : DiagramaClases)]
+
+[for (paquete : Package | raiz.packages_contenidos)]	
+[for (clase : Clase | paquete.clasificadores_contenidos->filter(Clase))]
+[if (clase.tieneABM)]
+[file ('src/test/java/'+raiz.artefacto_contenido.grupoId.substituteAll('.', '/')+'/'+raiz.artefacto_contenido.artefactotId+'/controller/'+clase.nombre+'ControllerTest.java', false, 'UTF-8')]
+package [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].controller;
+
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].domain.*;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].repository.*;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.*;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.dto.*;
+import [raiz.artefacto_contenido.grupoId/].[raiz.artefacto_contenido.artefactotId/].service.mapper.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+
+@SpringBootTest[comment (classes = JhipsterApp.class)/]
+@AutoConfigureMockMvc
+@WithMockUser
+public class [clase.nombre/]ControllerTest {
+
+[for (a : Atributo | clase.atributos_contenidos)]
+[if a.tipo = TipoDato::String]
+	private static final String DEFAULT_[a.nombre.toUpperCase()/] = "AAAAAAAAAA";
+    private static final String UPDATED_[a.nombre.toUpperCase()/] = "BBBBBBBBBB";
+
+[/if]
+[if a.tipo = TipoDato::int]
+	private static final int DEFAULT_[a.nombre.toUpperCase()/] = 1;
+    private static final int UPDATED_[a.nombre.toUpperCase()/] = 2;
+
+[/if]
+[if a.tipo = TipoDato::boolean]
+	private static final boolean DEFAULT_[a.nombre.toUpperCase()/] = true;
+    private static final boolean UPDATED_[a.nombre.toUpperCase()/] = false;
+
+[/if]
+[if a.tipo = TipoDato::char]
+	private static final char DEFAULT_[a.nombre.toUpperCase()/] = 'A';
+    private static final char UPDATED_[a.nombre.toUpperCase()/] = 'B';
+
+[/if]
+[if a.tipo = TipoDato::float]
+	private static final float DEFAULT_[a.nombre.toUpperCase()/] = 1.0;
+    private static final float UPDATED_[a.nombre.toUpperCase()/] = 2.0;
+
+[/if]
+[if a.tipo = TipoDato::double]
+	private static final double DEFAULT_[a.nombre.toUpperCase()/] = 1.0;
+    private static final double UPDATED_[a.nombre.toUpperCase()/] = 2.0;
+
+[/if]
+[if a.tipo = TipoDato::long]
+	private static final double DEFAULT_[a.nombre.toUpperCase()/] = 1L;
+    private static final double UPDATED_[a.nombre.toUpperCase()/] = 2L;
+
+[/if]
+[/for]    
+    @Autowired
+    private [clase.nombre/]Repository [clase.nombre.toLowerCase()/]Repository;
+
+    @Autowired
+    private [clase.nombre/]Mapper [clase.nombre.toLowerCase()/]Mapper;
+
+    @Autowired
+    private [clase.nombre/]Service [clase.nombre.toLowerCase()/]Service;
+
+    @Autowired
+    private EntityManager em;
+
+    @Autowired
+    private MockMvc rest[clase.nombre/]MockMvc;
+
+    private [clase.nombre/] [clase.nombre.toLowerCase()/];
+
+    public static [clase.nombre/] createEntity(EntityManager em) {
+        [clase.nombre/] [clase.nombre.toLowerCase()/] = new [clase.nombre/]();
+
+[for (a : Atributo | clase.atributos_contenidos)]
+        [clase.nombre.toLowerCase()/].set[a.nombre.toUpperFirst()/](DEFAULT_[a.nombre.toUpperCase()/]);
+[/for]
+        return [clase.nombre.toLowerCase()/];
+    }
+
+    public static [clase.nombre/] createUpdatedEntity(EntityManager em) {
+        [clase.nombre/] [clase.nombre.toLowerCase()/] = new [clase.nombre/]();
+[for (a : Atributo | clase.atributos_contenidos)]
+        [clase.nombre.toLowerCase()/].set[a.nombre.toUpperFirst()/](UPDATED_[a.nombre.toUpperCase()/]);
+[/for]
+        return [clase.nombre.toLowerCase()/];
+    }
+
+    @BeforeEach
+    public void initTest() {
+        [clase.nombre.toLowerCase()/] = createEntity(em);
+    }
+	
+    @Test
+    @Transactional
+    public void create[clase.nombre/]() throws Exception {
+        int databaseSizeBeforeCreate = [clase.nombre.toLowerCase()/]Repository.findAll().size();
+        
+        [clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO = [clase.nombre.toLowerCase()/]Mapper.toDto([clase.nombre.toLowerCase()/]);
+        rest[clase.nombre/]MockMvc.perform(post("/api/[clase.nombre.toLowerCase()/]")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes([clase.nombre.toLowerCase()/]DTO)))
+            .andExpect(status().isCreated());
+
+        
+        List<[clase.nombre/]> [clase.nombre.toLowerCase()/]List = [clase.nombre.toLowerCase()/]Repository.findAll();
+        assertThat([clase.nombre.toLowerCase()/]List).hasSize(databaseSizeBeforeCreate + 1);
+        [clase.nombre/] test[clase.nombre/] = [clase.nombre.toLowerCase()/]List.get([clase.nombre.toLowerCase()/]List.size() - 1);
+
+[for (a : Atributo | clase.atributos_contenidos)]      
+		assertThat(test[clase.nombre/].get[a.nombre.toUpperFirst()/]()).isEqualTo(DEFAULT_[a.nombre.toUpperCase()/]);
+[/for]
+    }
+
+	@Test
+    @Transactional
+    public void update[clase.nombre/]() throws Exception {
+        
+        [clase.nombre.toLowerCase()/]Repository.saveAndFlush([clase.nombre.toLowerCase()/]);
+
+        int databaseSizeBeforeUpdate = [clase.nombre.toLowerCase()/]Repository.findAll().size();
+
+        
+        [clase.nombre/] updated[clase.nombre/] = [clase.nombre.toLowerCase()/]Repository.findById([clase.nombre.toLowerCase()/].getId()).get();
+        
+        em.detach(updated[clase.nombre/]);
+
+[for (a : Atributo | clase.atributos_contenidos)]
+        [clase.nombre.toLowerCase()/].set[a.nombre.toUpperFirst()/](UPDATED_[a.nombre.toUpperCase()/]);
+[/for]
+
+        [clase.nombre/]DTO [clase.nombre.toLowerCase()/]DTO = [clase.nombre.toLowerCase()/]Mapper.toDto(updated[clase.nombre/]);
+
+        rest[clase.nombre/]MockMvc.perform(put("/api/[clase.nombre.toLowerCase()/]")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes([clase.nombre.toLowerCase()/]DTO)))
+            .andExpect(status().isOk());
+
+        
+        List<[clase.nombre/]> [clase.nombre.toLowerCase()/]List = [clase.nombre.toLowerCase()/]Repository.findAll();
+        assertThat([clase.nombre.toLowerCase()/]List).hasSize(databaseSizeBeforeUpdate);
+        [clase.nombre/] test[clase.nombre/] = [clase.nombre.toLowerCase()/]List.get([clase.nombre.toLowerCase()/]List.size() - 1);
+[for (a : Atributo | clase.atributos_contenidos)]      
+		assertThat(test[clase.nombre/].get[a.nombre.toUpperFirst()/]()).isEqualTo(UPDATED_[a.nombre.toUpperCase()/]);
+[/for]    }
+	
+    @Test
+    @Transactional
+    public void delete[clase.nombre/]() throws Exception {
+        
+        [clase.nombre.toLowerCase()/]Repository.saveAndFlush([clase.nombre.toLowerCase()/]);
+
+        int databaseSizeBeforeDelete = [clase.nombre.toLowerCase()/]Repository.findAll().size();
+
+        
+        rest[clase.nombre/]MockMvc.perform(delete("/api/[clase.nombre.toLowerCase()/]/{id}", [clase.nombre.toLowerCase()/].getId())
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        
+        List<[clase.nombre/]> [clase.nombre.toLowerCase()/]List = [clase.nombre.toLowerCase()/]Repository.findAll();
+        assertThat([clase.nombre.toLowerCase()/]List).hasSize(databaseSizeBeforeDelete - 1);
+    }
+}
+[/file]
+[/if]
+[/for]
+[/for]
+[/template]

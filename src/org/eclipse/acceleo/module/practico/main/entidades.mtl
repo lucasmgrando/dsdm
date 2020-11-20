@@ -72,7 +72,7 @@ public class [clase.nombre/] implements Serializable {
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.origen.nombre]
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
                joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),
@@ -120,7 +120,7 @@ public class [clase.nombre/] implements Serializable {
 
 [/if]
 [if r.multiplicidad = Multiplicidad::manyToMany and clase.nombre = r.origen.nombre]
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JoinTable(name = "[r.origen.nombre.toLowerCase()/]_[r.destino.nombre.toLowerCase()/]",
                joinColumns = @JoinColumn(name = "[r.origen.nombre.toLowerCase()/]_id", referencedColumnName = "id"),
