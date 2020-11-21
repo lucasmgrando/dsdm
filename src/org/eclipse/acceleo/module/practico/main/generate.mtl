@@ -11,6 +11,7 @@
 [import org::eclipse::acceleo::module::practico::main::configuracion /]
 [import org::eclipse::acceleo::module::practico::main::pruebas /]
 
+
 [template public generate(raiz : DiagramaClases)]
 [comment @main/]
 [generarClaseMain(raiz)/]
